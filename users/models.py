@@ -8,7 +8,7 @@ from django.contrib.auth.models import AbstractUser
 # AbstractUser가 뭔지를 알기위해 코드를 뜯어보면 좋다.
 
 
-class User(AbstractUser):
+class User(AbstractUser): #Abstract유저안에 기본정보인 이름, 이메일 등이 들어가있다.
     """ Explanation """
     # 자기소개, 성별 등 원하는 속성을 추가
     # 여기에 뭘 쓰든 장고가 알아서 form으로 만들어주고 마이그레이션과 함께
@@ -48,26 +48,29 @@ class User(AbstractUser):
     # -> add user에서 bio필드 확인 가능!
 
     # default를 써야하는 이유는 원래 존재하던 user에도 어떤 값을 줘야하니까
-    avatar = models.ImageField(null=True, blank=True)  # pillow install해야 사용 가능.
+    # pillow install해야 사용 가능.
+    avatar = models.ImageField(blank=True)
     gender = models.CharField(
         choices=GENDER_CHOICES,
         max_length=10, 
-        null=True, blank=True,
+        blank=True,
         ) # 비어있어도 상관없다.
     
     # Datetime과 Date 필드가 있다.
-    birthdate = models.DateField(null=True)
+    birthdate = models.DateField(blank=True, null=True)
     language = models.CharField(
-        null=True, blank=True,
+        blank=True,
         choices = LANGUAGE_CHOICES,
         max_length=2,
     )
     currency = models.CharField(
-        null=True, blank=True,
+        blank=True,
         choices = CURRENCY_CHOICES,
         max_length=3,
     )
-    superhost = models.BooleanField(default = False)
+    superhost = models.BooleanField(blank=True, null=True)
 
+    def __str__(self):
+        return "manU" # 원래는 self.username
 
-    pass  # 이 모델을 adimg에 연결해야한다.. 왜?
+    # 이 모델을 admin에 연결해야한다.. 왜?

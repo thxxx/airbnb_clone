@@ -12,7 +12,7 @@ class CustomUserAdimin(UserAdmin):
         (
             "Custom Profile",
             {
-                "fields":(  
+                "fields":(  # 파란 네모
                     #파란네모 안에 들어갈 field
                     "avatar",
                     "gender",

@@ -39,8 +39,18 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
 
 ]
+
+THIRD_PARTY_APPS = [
+    "django_countries"
+]
+
 PROJECT_APPS = [
-    'users.apps.UsersConfig' # 이게 추가한 부분
+    'core.apps.CoreConfig',
+    'users.apps.UsersConfig', # 이게 추가한 부분
+    'rooms.apps.RoomsConfig',
+    'reviews.apps.ReviewsConfig',
+    'reservations.apps.ReservationsConfig',
+    'lists.apps.ListsConfig',
 ]
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS
 # 여기에 추가하면 장고가 알아서 추가한다.
