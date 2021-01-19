@@ -49,7 +49,7 @@ class User(AbstractUser): #Abstract유저안에 기본정보인 이름, 이메�
 
     # default를 써야하는 이유는 원래 존재하던 user에도 어떤 값을 줘야하니까
     # pillow install해야 사용 가능.
-    avatar = models.ImageField(blank=True)
+    avatar = models.ImageField(blank=True, upload_to="avatars") # upload_to로 적은 파일에 사진을 올려줘서 정리하기 쉽게 해준다
     gender = models.CharField(
         choices=GENDER_CHOICES,
         max_length=10, 

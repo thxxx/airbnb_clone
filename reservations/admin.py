@@ -11,4 +11,11 @@ class ReservationAdmin(admin.ModelAdmin):
         'status',
         'check_in',
         'check_out',
+        'guest',
+        'in_progress',
+        'is_finished',
+    )
+
+    list_filter = (
+        "status", # 생성한걸로는 필터가 안된다!
     )

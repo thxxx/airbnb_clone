@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+import os
 
 from pathlib import Path
 
@@ -141,3 +142,8 @@ STATIC_URL = '/static/'
 # 유저의 정보를 추가하기 위해서 작성한다.
 # 서버를 끄고
 AUTH_USER_MODEL = "users.User"
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "uploads") # base_dir은 절대경로를 이미 가지고 있다
+
+MEDIA_URL = "/media/" # uploads 이름은 사라지고 /media/avatars로 접근 가능하다 경로시작에 / 를쓰면 root라는걸 말해준다.
+# admin/1/change/media/사진 이 아니라 바로 /media/사진으로

@@ -10,14 +10,28 @@ class Conversation(core_models.TimeStampedModel):
 #    user = models.ForeignKey("users.User", on_delte)
 
     def __str__(self):
-        return str(self.created) # str아니면 오류난다.
+        usernames = []
+        for user in self.participants.all():
+            usernames.append(user.username)
+        return ",  ".join(usernames)
+        # return str(self.created) # str아니면(list, int 등)  오류난다.
+
+    def count_messages(self):
+        return self.messages.count() # related name으로 messages를 넣어 놨ㄷ으니까
+
+    count_messages.short_description = "Number of messages"
+
+    def count_participants(self):
+        return self.participants.count() # related name으로 messages를 넣어 놨ㄷ으니까
+
+    count_participants.short_description = "Number of participants"
 
 
 class Message(core_models.TimeStampedModel):
 
     message = models.TextField()
-    user = models.ForeignKey("users.User", on_delete=models.CASCADE)
-    conversation = models.ForeignKey("Conversation", on_delete=models.CASCADE)
+    user = models.ForeignKey("users.User", related_name="messages", on_delete=models.CASCADE)
+    conversation = models.ForeignKey("Conversation", related_name="messages", on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.user} says: {self.text}'
+        return f'{self.user} says: {self.message}'

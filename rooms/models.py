@@ -49,7 +49,7 @@ class Photo(core_models.TimeStampedModel):
 
     """ Photo model """
     caption = models.CharField(max_length=80)
-    ifile = models.ImageField()
+    ifile = models.ImageField(upload_to="room_photos") # 이건 좀 특별해
     room = models.ForeignKey("Room", related_name="photos", on_delete=models.CASCADE) # Room에 스트링 처리를 하면 해당 class가 Photo뒤에 생성되었더라도 에러 x
 
     def __str__(self): # Str 메소드 정의
