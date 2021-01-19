@@ -6,4 +6,4 @@ from . import models
 @admin.register(models.Review)
 class ReviewAdmin(admin.ModelAdmin):
 
-    pass
+    list_display = ('__str__', 'rating_average') # str 이랑 model의 methond를 쓸 수 있다.

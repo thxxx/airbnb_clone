@@ -2,12 +2,13 @@ from django.db import models
 from core import models as core_models
 # Create your models here.
 
+
 class Reservation(core_models.TimeStampedModel):
     """ Reservation Model """
 
     STATUS_PENDONG = "pending"
     STATUS_CONFIRMED = "confirmed"
-    STATUS_CANCELED =  "canceled"
+    STATUS_CANCELED = "canceled"
 
     STATUS_CHOICES = (
         (STATUS_PENDONG, "Pending"),
@@ -15,7 +16,8 @@ class Reservation(core_models.TimeStampedModel):
         (STATUS_CANCELED,  "Canceled"),
     )
 
-    status = models.CharField(max_length=12, choices=STATUS_CHOICES, default=STATUS_PENDONG)
+    status = models.CharField(
+        max_length=12, choices=STATUS_CHOICES, default=STATUS_PENDONG)
 
     guest = models.ForeignKey("users.User", on_delete=models.CASCADE)
 

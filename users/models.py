@@ -71,6 +71,6 @@ class User(AbstractUser): #Abstract유저안에 기본정보인 이름, 이메�
     superhost = models.BooleanField(blank=True, null=True)
 
     def __str__(self):
-        return "manU" # 원래는 self.username
+        return self.username # 원래는 self.username
 
     # 이 모델을 admin에 연결해야한다.. 왜?

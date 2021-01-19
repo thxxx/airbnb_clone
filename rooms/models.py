@@ -50,7 +50,7 @@ class Photo(core_models.TimeStampedModel):
     """ Photo model """
     caption = models.CharField(max_length=80)
     ifile = models.ImageField()
-    room = models.ForeignKey("Room", on_delete=models.CASCADE) # Room에 스트링 처리를 하면 해당 class가 Photo뒤에 생성되었더라도 에러 x
+    room = models.ForeignKey("Room", related_name="photos", on_delete=models.CASCADE) # Room에 스트링 처리를 하면 해당 class가 Photo뒤에 생성되었더라도 에러 x
 
     def __str__(self): # Str 메소드 정의
         return self.caption
@@ -78,14 +78,24 @@ class Room(core_models.TimeStampedModel):
     check_out = models.TimeField()
     instant_book = models.BooleanField(default=False)
  
-    host = models.ForeignKey("users.User", on_delete=models.CASCADE) # User model과 연결해야 한다. foreignKey 이건 임포트가 필요함.
+ # khj.rooms 로 room_set에 접근가능 rooms_set은 class Room
+    host = models.ForeignKey("users.User", related_name="rooms", on_delete=models.CASCADE) # User model과 연결해야 한다. foreignKey 이건 임포트가 필요함.
     # on_delete는 삭제 되었을때의 행동. CASCADE는 이 유저가 생성한 Room도 지워진다는 뜻. https://docs.djangoproject.com/en/3.1/
     # on_delete에 들어갈 수 있는건 많다. PROTECT는 룸을 지우기전까진 유저를 지울수 없다.
 
-    room_type = models.ForeignKey(RoomType, on_delete=models.SET_NULL, null=True) # room은 host를 가지지만 user는 roonm을 가지지 않는다.
-    amenities = models.ManyToManyField(Amenity, blank=True)
-    facilities =  models.ManyToManyField(Facility, blank=True)
-    house_rules =  models.ManyToManyField(HouseRule, blank=True)
+    room_type = models.ForeignKey(RoomType, related_name="rooms", on_delete=models.SET_NULL, null=True) # room은 host를 가지지만 user는 roonm을 가지지 않는다.
+    amenities = models.ManyToManyField(Amenity, related_name="rooms", blank=True)
+    facilities =  models.ManyToManyField(Facility, related_name="rooms", blank=True)
+    house_rules =  models.ManyToManyField(HouseRule, related_name="rooms", blank=True)
 
     def __str__(self):
         return self.name
+
+    def total_rating(self):
+        all_reviews = self.reviews.all()
+        all_ratings = 0
+        for review in all_reviews:
+            all_ratings += review.rating_average()
+        # reduce라는 함수 사용하자
+        return all_ratings/len(all_reviews)
+        
