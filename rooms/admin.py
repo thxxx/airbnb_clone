@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import mark_safe
 from . import models
 # Register your models here.
 
@@ -14,15 +15,19 @@ class ItemAdmin(admin.ModelAdmin):
     def used_by(self, obj):
         return obj.rooms.count()
     
-
+class PhotoInline(admin.TabularInline): # 글자 대소문자 하나라도 다르면 사용 못하는 > framework
+    model = models.Photo 
+    #StackedInline도 있다. 생긴거만 다름
 
 @admin.register(models.Room)  # admin pannel과 연결!
 class RoomAdmin(admin.ModelAdmin):
 
+    inlines = (PhotoInline,)
+
     fieldsets = (  # all over the place인것들 정리
         (
             "Basic Info",
-            {"fields": ("name", "description", "country", "address", "price")},
+            {"fields": ("name", "description", "country", "address", "city", "price")},
         ),
         ("Times", {"fields": ("check_in", "check_out", "instant_book")}),
         ("Spaces", {"fields": ("guests", "beds", "bedrooms", "baths")}),
@@ -67,6 +72,9 @@ class RoomAdmin(admin.ModelAdmin):
         "facilities",
         "city",
     )
+
+    raw_id_fields = ("host",) # 유저리스트가 매우 길어졌을때 그걸 다 보기를 원하지 않았어
+
     # select room 페이지에서 보일것들
     # https://docs.djangoproject.com/en/3.1/ref/contrib/admin/ 여기서 확인 가능
     search_fields = ["city", "host__username"]  # 여기서는 __로 포린키처럼 사용
@@ -81,5 +89,14 @@ class RoomAdmin(admin.ModelAdmin):
 
 @admin.register(models.Photo)
 class PhotoAdmin(admin.ModelAdmin):
+    """ photo admin """
+    list_display = (
+        "__str__",
+        'get_thumbnail',
+    )
 
-    pass
+    def get_thumbnail(self,obj):
+        # string처럼 보이는 것도 type을 보면 class일때도 있다
+        return mark_safe(f'<img width="40px" src="{obj.ifile.url}" />') # 장고의 보안시스템이 사진에 다른 방식으로 접근하는걸 막아준다
+        # 장고야 걱정하지마 이건 괜찮아
+    get_thumbnail.short_description = "Thum"

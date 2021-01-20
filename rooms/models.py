@@ -48,7 +48,7 @@ class HouseRule(AbstractItem):
 class Photo(core_models.TimeStampedModel):
 
     """ Photo model """
-    caption = models.CharField(max_length=80)
+    caption = models.CharField(max_length=80, blank=True)
     ifile = models.ImageField(upload_to="room_photos") # 이건 좀 특별해
     room = models.ForeignKey("Room", related_name="photos", on_delete=models.CASCADE) # Room에 스트링 처리를 하면 해당 class가 Photo뒤에 생성되었더라도 에러 x
 
@@ -91,11 +91,22 @@ class Room(core_models.TimeStampedModel):
     def __str__(self):
         return self.name
 
+    
+    def save(self, *args, **kwargs):    #https://docs.djangoproject.com/en/3.1/topics/db/models/
+        #if self.name = "fucku": # 새로 수정된 버전을 말함
+        #   return
+        self.city = "city" # 왜 앞글자만 대문자화가 안될까 city는 string이 아니다
+        super().save(*args, **kwargs)  # Call the "real" save() method. 이게 있어야 save하는거임!
+
+
     def total_rating(self):
         all_reviews = self.reviews.all()
         all_ratings = 0
         for review in all_reviews:
             all_ratings += review.rating_average()
         # reduce라는 함수 사용하자
-        return all_ratings/len(all_reviews)
+        if len(all_reviews) == 0 :
+            return "no one"
+        else:
+            return all_ratings/len(all_reviews)
         
