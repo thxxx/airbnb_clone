@@ -95,9 +95,9 @@ class Room(core_models.TimeStampedModel):
     def save(self, *args, **kwargs):    #https://docs.djangoproject.com/en/3.1/topics/db/models/
         #if self.name = "fucku": # 새로 수정된 버전을 말함
         #   return
-        self.city = "city" # 왜 앞글자만 대문자화가 안될까 city는 string이 아니다
+        self.city = str.capitalize(self.city) # 왜 앞글자만 대문자화가 안될까 city는 string이 아니다
         super().save(*args, **kwargs)  # Call the "real" save() method. 이게 있어야 save하는거임!
-
+    # 이건 admin이든 view든 어디서든 수정할 때 실행된다. admin에서만 적용되는건 save_model임.
 
     def total_rating(self):
         all_reviews = self.reviews.all()
