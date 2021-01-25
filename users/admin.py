@@ -37,7 +37,7 @@ class CustomUserAdimin(UserAdmin):
         "email",
         "birthdate",
         "language",
-        "currency",
+        "gender",
         "superhost",
     )
     # list_display = ("username", "gender", "language", "currency", "superhost")
