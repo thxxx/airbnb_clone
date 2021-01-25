@@ -60,6 +60,7 @@ class RoomAdmin(admin.ModelAdmin):
 
     def count_photos(self, obj):  
         return obj.photos.count()
+    count_photos.short_description = "Photo Count"
 
     ordering = ('name', 'price') # 정렬 순서. 1순위, 2순위 물론 직접 눌러서도 정렬 가능하고
 

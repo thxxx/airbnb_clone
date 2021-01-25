@@ -14,12 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings # 파일을 직접이 아니라 다른 경로로 수입한다.
 from django.conf.urls.static import static
 
+
 urlpatterns = [
+    path("", include("core.urls")),
     path('admin/', admin.site.urls), #adimin페이지로 가는 url. 장고가 uRL.PY를 실행한다.
+    # url, view다. view는 내가 이 요청에 반응하는 방법.
 ]
 
 #프로덕션인지 개발중인지를 감지해서 error page 보여주는게 DEBUG = True
