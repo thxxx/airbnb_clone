@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    path("", include("core.urls")),
+    path("", include("core.urls", namespace="core")), # ""의 경로를 인식하면 core.urls로 가서 살펴보고 없으면 다시 뒤의 path로 간다.
     path('admin/', admin.site.urls), #adimin페이지로 가는 url. 장고가 uRL.PY를 실행한다.
     # url, view다. view는 내가 이 요청에 반응하는 방법.
 ]
