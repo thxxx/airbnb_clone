@@ -1,1 +1,12 @@
 장고 documentation으로 가서 계속해서 확인하자.
+장고 템플릿에서는 함수를 ()로 호출하지 않는다.
+
+
+파지네이터는 get_page와 page 두개의 메소드를 준다. page가 더 자세하게 할 수 있지만 귀찮음.
+page는 없는 페이지로 가거나 하면 에러가 뜬다.
+예외처리 해야댐.
+redirect, EmptyPage 임포트 해야한다.
+
+list view에 대한 개념. class based view로부터 왔다. 
+원래 home.html인걸 room_list.html로 바궈야한다. 장고에서 요구하는 이름.
+

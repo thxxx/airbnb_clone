@@ -1,6 +1,7 @@
-from django.shortcuts import render
+"""
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.core.paginator import Paginator # 파지네이터를 장고의 도움을 받아서 만들기
+from django.core.paginator import Paginator, EmptyPage # 파지네이터를 장고의 도움을 받아서 만들기
 from . import models
 import math
 
@@ -23,16 +24,30 @@ def all_rooms(request):
     # limit = page_size*page
     # all_rooms = models.Room.objects.all()[limit-page_size : limit] # [offset:limit] sql에서 제한을한다. 쿼리를 슬라이싱하면 새로운 쿼리를 반환한다.
     # page_count = models.Room.objects.count()/page_size 
-    room_list = models.Room.objects.all() #이게 쿼리셋을 생성한다. room_list가 만들어 졌을땐 아무것도 하지 않지만 room_list가 호출되었을때 모든 데이터를 가져온다.
-    paginator = Paginator(room_list, 10)
-    rooms = paginator.get_page(page) #vars로 rooms안을 보자. object_list도 있고 number도 가지고 있다.
+    room_list = models.Room.objects.all() #이게 쿼리셋을 생성한다. room_list가 만들어 졌을땐 아무것도 하지 않는다. DB에 입력되지 않는다. room_list가 호출되었을때 모든 데이터를 가져온다.
+    paginator = Paginator(room_list, 10, orphans=3) # orphans는 마지막에 남는 객체들이 해당 갯수 이하면 전 페이지에 포함시킨다. 숨기는거임
+    # list of objects , number
+    try:
+        rooms = paginator.page(page) #vars로 rooms안을 보자. object_list도 있고 number도 가지고 있다.
+    except EmptyPage: # 이거 import해야된다!! Exceptioni은 모든 예외
+        return redirect("/")
+
     return render(request, "rooms/home.html", context={ # 이걸로 값을 전달!!
         # "rooms": all_rooms,
         # "page":page,
         # "page_count": math.ceil(page_count),
         # "page_range": range(1, math.ceil(page_count)+1),
-        "rooms":rooms
+        "page":rooms
     }) 
     #viwe 이름은 urls.py에 있는 이름과 같아야하고 템플릿 이름은 templates폴더 안에 있는 파일이름이어야 한다.
 
+"""
 
+from django.views.generic import ListView
+from . import models
+
+#list view
+class HomeView(ListView): # urls에서 all_rooms를 HomeView로 바꾸기. as_view를 붙여서 함수처럼 보이게
+    """ HomeView Definition """
+    model = models.Room
+    
